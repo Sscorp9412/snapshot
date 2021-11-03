@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0"
+    />
+    <title>Snapshort</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* font-family: 'Shadows Into Light', cursive; */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .app {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .tempbox {
+        border: 1px solid red;
+      }
+
+      .snapshot {
+        width: 480px;
+        height: 520px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        padding: 1.5rem;
+        transform: rotate(-6deg);
+      }
+
+      .snapshot .pin {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(32deg, rgb(187 187 187), rgb(0 0 0));
+        box-shadow: 3px 3px 8px #000;
+        left: 50%;
+        top: 0%;
+        border-radius: 50%;
+      }
+
+      .snapshot .image-container {
+        width: 100%;
+        height: 70%;
+      }
+
+      .snapshot .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+      }
+
+      .snapshot .body {
+        font-size: 1.7rem;
+        margin-top: 1.5rem;
+      }
+
+      .snapshot .body p {
+        font-family: "Shadows Into Light", cursive;
+      }
+
+      .choose {
+        box-shadow: 2px 2px 8px #000;
+        padding: 10px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: rotate(-12deg);
+        position: relative;
+        left: 78%;
+        bottom: 64px;
+      }
+
+      @keyframes move {
+        from {
+          transform: translateX(0px);
+        }
+        to {
+          transform: translateX(100px);
+        }
+      }
+
+      @keyframes move-back {
+        from {
+          transform: translateX(100px);
+        }
+        to {
+          transform: translateX(0px), rotate(-12deg);
+        }
+      }
+
+      .choose img {
+        cursor: pointer;
+      }
+
+      @media screen and (max-width: 576px) {
+        .snapshot {
+          width: 280px;
+          height: 420px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="snapshot">
+        <div class="pin"></div>
+        <div class="image-container">
+          <img
+            class="snap-pic"
+            src=""
+            alt="Please Click the Camera to take pic"
+          />
+        </div>
+        <div class="body">
+          <p>regards</p>
+          <p id="quotation">Anonymous</p>
+          <div class="choose">
+            <input type="file" id="take-pic" hidden />
+            <img src="./camera.svg" id="click-image" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const quotation = prompt("Enter your full name?");
+        document.getElementById("quotation").innerHTML=quotation;
+      })
+
+      const cam = document.getElementById("click-image")
+      cam.onclick = () => {
+        document.querySelector(".choose").style.animation = "move 5s 1 forwards"
+        document.getElementById("take-pic").click()
+      }
+
+      document.getElementById("take-pic").onchange = (e) => takeSnap(e)
+      function takeSnap(e) {
+        const output = document.querySelector(".snap-pic")
+        const snapshot = URL.createObjectURL(event.target.files[0])
+        output.src = snapshot
+        document.querySelector(".choose").style.animation =
+          "move-back 5s 1 forwards"
+        output.onload = function () {
+          URL.revokeObjectURL(output.src) // free memory
+        }
+      }
+    </script>
+  </body>
+</html>
